@@ -1,2 +1,57 @@
-这是一个测试文件
-第二次测试中...
+# quickgame-toolkit
+
+这个是开发者用于打包cocoscreator开发的游戏到快游戏平台工具
+
+- 前提：安装了node环境 [node官网：https://nodejs.org/en/]
+- cocos creator 使用版本1.8.2及以上
+
+### 如何使用
+
+1. 解压quickgame-toolkit，切换到解压目录下，并且安装依赖
+
+```
+   # 进入解压目录
+   cd quickgame-toolkit
+   # 安装项目的依赖
+   npm install
+```
+2. 将quickgame-toolkit下的"/lib/bin"目录加入系统变量中（例如：/path/quickgame-toolkit/lib/bin，其中“/path/quickgame-toolkit”是解压安装的目录）
+
+3. 将cocos creator所在的安装目录添加到系统变量中(例如：/path/CocosCreator，其中“/path/CocosCreator”是cocos creator安装目录)
+
+4. 到cocos creator所在项目目录下
+
+```
+   quickgame cocos
+```
+
+5. 在cocos creator项目目录下生产了
+
+```
+|-build/quickgame
+    |-builtin              //js库
+    |-dist                 //最终的rpk包
+      |-com.demo.rpk       //rpk包
+    |-res                  //游戏中的资源文件
+    |-src                  //游戏业务代码
+    |-sign                 //签名
+      |-debug              //测试证书，默认生成
+        |-certificate.pem  //证书
+        |-private.pem      //私钥
+      |-release            //正式证书，开发者自己添加
+        |-certificate.pem  //证书
+        |-private.pem      //私钥
+    |-main.js              //项目入口文件
+    |-manifest.json        //可以配置包名、版本号、授权等
+```
+
+6. 增加release签名
+    - 开发者需要自己添加证书，其中debug下面的证书只供调试使用，开发者需要通过openssl命令等工具生成签名文件private.pem、certificate.pem
+
+    ```
+    openssl req -newkey rsa:2048 -nodes -keyout private.pem -x509 -days 3650 -out certificate.pem
+    ```
+    
+    - 在工程的quickgame-toolkit的sign目录下创建release目录，将私钥文件private.pem和证书文件certificate.pem拷贝进去
+    - 修改后在cocos creator项目下重新执行命令 [quickgame cocos] 即可重新生成release签名的游戏包
+
